@@ -21,6 +21,27 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Diwali Greeting API is running! 🪔",
+    endpoints: {
+      user: "/api/v1/user",
+      gemini: "/api/v1/gemini"
+    }
+  });
+});
+
+// API health check
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is healthy",
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/gemini", geminiRouter);
 
