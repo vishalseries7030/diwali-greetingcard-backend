@@ -13,7 +13,13 @@ dotenv.config();
 // middlwares
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5173", 
+      "http://localhost:5174", 
+      "http://localhost:3000",
+      "https://diwali-greetingcard-backend.onrender.com",
+      /\.vercel\.app$/  // Allow all Vercel preview and production URLs
+    ],
     credentials: true, // Allow cookies
   })
 );
