@@ -37,10 +37,22 @@ userRouter.post("/login", async (req, res) => {
       return res.status(401).json({ Message: "Email or password do not match" });
     }
     const token = await user.generateJWTToken();
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
     res.status(200).json({
       Message: "User logged in successfully",
       success: true,
+      token: token, // Send token in response for client-side storage
+      user: {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+      }
     });
   } catch (error) {
     res
