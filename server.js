@@ -13,14 +13,25 @@ dotenv.config();
 // middlwares
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", 
-      "http://localhost:5174", 
-      "http://localhost:3000",
-      "https://diwali-greetingcard-backend.onrender.com",
-      /\.vercel\.app$/  // Allow all Vercel preview and production URLs
-    ],
-    credentials: true, // Allow cookies
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000",
+        "https://diwali-greetingcard-backend.onrender.com"
+      ];
+      
+      // Allow Vercel domains
+      if (!origin || allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Allow all for now
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+    exposedHeaders: ['Set-Cookie']
   })
 );
 app.use(cookieParser());
