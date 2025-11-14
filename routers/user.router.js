@@ -34,7 +34,7 @@ userRouter.post("/login", async (req, res) => {
     }
     const user = await UserModel.findOne({ email });
     if (!(user && (await user.comparePassword(password)))) {
-      res.status(401).json({ Message: "Email or password do not match" });
+      return res.status(401).json({ Message: "Email or password do not match" });
     }
     const token = await user.generateJWTToken();
     res.cookie("token", token);
